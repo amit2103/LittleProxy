@@ -5,6 +5,7 @@ import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.ChannelGroupFuture;
 import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.udt.nio.NioUdtProvider;
 import io.netty.handler.traffic.GlobalTrafficShapingHandler;
@@ -486,16 +487,8 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
                 serverGroup.getClientToProxyAcceptorPoolForTransport(transportProtocol),
                 serverGroup.getClientToProxyWorkerPoolForTransport(transportProtocol));
 
-        ChannelInitializer<Channel> initializer = new ChannelInitializer<Channel>() {
-            protected void initChannel(Channel ch) {
-                new ClientToProxyConnection(
-                        DefaultHttpProxyServer.this,
-                        sslEngineSource,
-                        authenticateSslClients,
-                        ch.pipeline(),
-                        globalTrafficShapingHandler);
-            }
-        };
+
+        ChannelInitializer<Channel> initializer = new Http2ServerInitializer(sslEngineSource, authenticateSslClients, null, 16 * 1024, globalTrafficShapingHandler, DefaultHttpProxyServer.this );
         switch (transportProtocol) {
             case TCP:
                 LOG.info("Proxy listening with TCP transport");

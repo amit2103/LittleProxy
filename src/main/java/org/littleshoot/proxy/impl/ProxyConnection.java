@@ -60,7 +60,7 @@ import static org.littleshoot.proxy.impl.ConnectionState.*;
  *            the type of "initial" message. This will be either
  *            {@link HttpResponse} or {@link HttpRequest}.
  */
-abstract class ProxyConnection<I extends HttpObject> extends
+public abstract class ProxyConnection<I extends HttpObject> extends
         SimpleChannelInboundHandler<Object> {
     protected final ProxyConnectionLogger LOG = new ProxyConnectionLogger(this);
 
@@ -126,6 +126,12 @@ abstract class ProxyConnection<I extends HttpObject> extends
      * @param msg {@link HAProxyMessage}
      */
     protected abstract void readHAProxyMessage(HAProxyMessage msg);
+
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+        this.proxyServer.registerChannel(channel);
+    }
 
 
     /**
@@ -631,6 +637,10 @@ abstract class ProxyConnection<I extends HttpObject> extends
         }
     }
 
+    public  void setContext(ChannelHandlerContext ctx) {
+        this.ctx = ctx;
+    }
+
     /* *************************************************************************
      * Activity Tracking/Statistics
      **************************************************************************/
@@ -639,7 +649,7 @@ abstract class ProxyConnection<I extends HttpObject> extends
      * Utility handler for monitoring bytes read on this connection.
      */
     @Sharable
-    protected abstract class BytesReadMonitor extends
+    public abstract class BytesReadMonitor extends
             ChannelInboundHandlerAdapter {
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg)
@@ -685,7 +695,7 @@ abstract class ProxyConnection<I extends HttpObject> extends
      * Utility handler for monitoring responses read on this connection.
      */
     @Sharable
-    protected abstract class ResponseReadMonitor extends
+    public abstract class ResponseReadMonitor extends
             ChannelInboundHandlerAdapter {
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg)
@@ -708,7 +718,7 @@ abstract class ProxyConnection<I extends HttpObject> extends
      * Utility handler for monitoring bytes written on this connection.
      */
     @Sharable
-    protected abstract class BytesWrittenMonitor extends
+    public abstract class BytesWrittenMonitor extends
             ChannelOutboundHandlerAdapter {
         @Override
         public void write(ChannelHandlerContext ctx,
@@ -732,7 +742,7 @@ abstract class ProxyConnection<I extends HttpObject> extends
      * Utility handler for monitoring requests written on this connection.
      */
     @Sharable
-    protected abstract class RequestWrittenMonitor extends
+    public abstract class RequestWrittenMonitor extends
             ChannelOutboundHandlerAdapter {
         @Override
         public void write(ChannelHandlerContext ctx,
@@ -778,7 +788,7 @@ abstract class ProxyConnection<I extends HttpObject> extends
      * Utility handler for monitoring responses written on this connection.
      */
     @Sharable
-    protected abstract class ResponseWrittenMonitor extends
+    public abstract class ResponseWrittenMonitor extends
             ChannelOutboundHandlerAdapter {
         @Override
         public void write(ChannelHandlerContext ctx,

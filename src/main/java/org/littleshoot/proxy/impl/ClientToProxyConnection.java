@@ -4,6 +4,7 @@ import com.google.common.io.BaseEncoding;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.haproxy.HAProxyMessage;
 import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
@@ -52,6 +53,7 @@ import static org.littleshoot.proxy.impl.ConnectionState.*;
  * .
  * </p>
  */
+@ChannelHandler.Sharable
 public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     private static final HttpResponseStatus CONNECTION_ESTABLISHED = new HttpResponseStatus(
             200, "Connection established");
@@ -119,7 +121,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
     private final ClientDetails clientDetails = new ClientDetails();
 
-    ClientToProxyConnection(
+    public ClientToProxyConnection(
             final DefaultHttpProxyServer proxyServer,
             SslEngineSource sslEngineSource,
             boolean authenticateClients,
@@ -127,7 +129,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
             GlobalTrafficShapingHandler globalTrafficShapingHandler) {
         super(AWAITING_INITIAL, proxyServer, false);
 
-        initChannelPipeline(pipeline);
+        //initChannelPipeline(pipeline);
 
         if (sslEngineSource != null) {
             LOG.debug("Enabling encryption of traffic from client to proxy");
@@ -740,7 +742,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
      * the {@link HttpResponseEncoder} or {@link io.netty.handler.codec.http.HttpRequestEncoder} before the
      * {@link HttpObjectAggregator} in the {@link ChannelPipeline}.
      */
-    private void initChannelPipeline(ChannelPipeline pipeline) {
+    public void initChannelPipeline(ChannelPipeline pipeline) {
         LOG.debug("Configuring ChannelPipeline");
 
         pipeline.addLast("bytesReadMonitor", bytesReadMonitor);
@@ -767,12 +769,12 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
         pipeline.addLast("requestReadMonitor", requestReadMonitor);
         pipeline.addLast("responseWrittenMonitor", responseWrittenMonitor);
 
-        pipeline.addLast(
+        /*pipeline.addLast(
                 "idle",
                 new IdleStateHandler(0, 0, proxyServer
-                        .getIdleConnectionTimeout()));
+                        .getIdleConnectionTimeout()));*/
 
-        pipeline.addLast("handler", this);
+        //pipeline.addLast("handler", this);
     }
 
     /**
