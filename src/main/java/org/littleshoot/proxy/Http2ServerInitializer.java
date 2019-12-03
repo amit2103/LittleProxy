@@ -107,6 +107,9 @@ public class Http2ServerInitializer extends ChannelInitializer<Channel> {
                         globalTrafficShapingHandler);
                proxyConnection.setChannel(ch);
                proxyConnection.setContext(ctx);
+               defaultHttpProxyServer.registerChannel(ctx.channel());
+               super.channelRegistered(ctx);
+
                 //ctx.fireChannelRegistered();
                 //use the old piece of code for now
 

@@ -434,7 +434,7 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
     /**
      * Register a new {@link Channel} with this server, for later closing.
      */
-    protected void registerChannel(Channel channel) {
+    public void registerChannel(Channel channel) {
         allChannels.add(channel);
     }
 
