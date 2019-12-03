@@ -91,7 +91,7 @@ public class Http2ServerInitializer extends ChannelInitializer<Channel> {
     private void configureClearText(Channel ch) {
         final ChannelPipeline p = ch.pipeline();
         final HttpServerCodec sourceCodec = new HttpServerCodec();
-        p.addLast(sourceCodec);
+        p.addLast("httpServerCodec", sourceCodec);
         p.addLast(new HttpServerUpgradeHandler(sourceCodec, upgradeCodecFactory));
         p.addLast(new SimpleChannelInboundHandler<HttpMessage>() {
             @Override
