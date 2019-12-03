@@ -129,7 +129,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
             GlobalTrafficShapingHandler globalTrafficShapingHandler) {
         super(AWAITING_INITIAL, proxyServer, false);
 
-        //initChannelPipeline(pipeline);
+        initChannelPipeline(pipeline);
 
         if (sslEngineSource != null) {
             LOG.debug("Enabling encryption of traffic from client to proxy");
@@ -748,18 +748,18 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
         pipeline.addLast("bytesReadMonitor", bytesReadMonitor);
         pipeline.addLast("bytesWrittenMonitor", bytesWrittenMonitor);
 
-        pipeline.addLast("encoder", new HttpResponseEncoder());
+        //pipeline.addLast("encoder", new HttpResponseEncoder());
         if (isAcceptProxyProtocol()) {
             pipeline.addLast("proxy-protocol-decoder", new HAProxyMessageDecoder());
         }
         // We want to allow longer request lines, headers, and chunks
         // respectively.
-        pipeline.addLast("decoder", new HttpRequestDecoder(
+        /*pipeline.addLast("decoder", new HttpRequestDecoder(
                 proxyServer.getMaxInitialLineLength(),
                 proxyServer.getMaxHeaderSize(),
-                proxyServer.getMaxChunkSize()));
+                proxyServer.getMaxChunkSize()));*/
 
-        // Enable aggregation for filtering if necessary
+        //Enable aggregation for filtering if necessary
         int numberOfBytesToBuffer = proxyServer.getFiltersSource()
                 .getMaximumRequestBufferSizeInBytes();
         if (numberOfBytesToBuffer > 0) {
@@ -769,10 +769,6 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
         pipeline.addLast("requestReadMonitor", requestReadMonitor);
         pipeline.addLast("responseWrittenMonitor", responseWrittenMonitor);
 
-        /*pipeline.addLast(
-                "idle",
-                new IdleStateHandler(0, 0, proxyServer
-                        .getIdleConnectionTimeout()));*/
 
         //pipeline.addLast("handler", this);
     }

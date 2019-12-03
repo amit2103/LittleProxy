@@ -542,7 +542,7 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
         return filtersSource;
     }
 
-    protected Collection<ActivityTracker> getActivityTrackers() {
+    public Collection<ActivityTracker> getActivityTrackers() {
         return activityTrackers;
     }
 
