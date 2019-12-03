@@ -318,6 +318,10 @@ public abstract class ProxyConnection<I extends HttpObject> extends
         protected Future execute() {
             try {
                 ChannelPipeline pipeline = ctx.pipeline();
+
+                if(pipeline.get("httpServerCodec") != null) {
+                    pipeline.remove("httpServerCodec");
+                }
                 if (pipeline.get("encoder") != null) {
                     pipeline.remove("encoder");
                 }
