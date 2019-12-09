@@ -1,5 +1,7 @@
 package org.littleshoot.proxy.http2;
 
+import org.littleshoot.proxy.Http2ServerInitializer;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
@@ -10,6 +12,9 @@ import io.netty.handler.codec.http2.HttpToHttp2ConnectionHandlerBuilder;
 import io.netty.handler.codec.http2.InboundHttp2ToHttpAdapter;
 import io.netty.handler.codec.http2.InboundHttp2ToHttpAdapterBuilder;
 
+/**
+ * Conevrts Http message which was originally converted by the {@link Http2ServerInitializer} back to Http/2 message
+ */
 public class HttpToHttp2ClientInitializer extends ChannelInitializer<Channel> {
 
 	private static final int MAX_CONTENT_LENGTH = 1024 * 100;

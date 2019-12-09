@@ -25,11 +25,11 @@ class ConnectionFlow {
     private volatile ConnectionFlowStep currentStep;
     private volatile boolean suppressInitialRequest = false;
     private final Object connectLock;
-    
+
     /**
      * Construct a new {@link ConnectionFlow} for the given client and server
      * connections.
-     * 
+     *
      * @param clientConnection
      * @param serverConnection
      * @param connectLock

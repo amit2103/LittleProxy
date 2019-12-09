@@ -10,6 +10,9 @@ import io.netty.handler.codec.http2.HttpToHttp2ConnectionHandlerBuilder;
 import io.netty.handler.codec.http2.InboundHttp2ToHttpAdapter;
 import io.netty.handler.codec.http2.InboundHttp2ToHttpAdapterBuilder;
 
+/**
+ * Converts Http2 message to Http
+ */
 public class Http2ToHttpServerInitializer extends ChannelInitializer<Channel> {
 
 	private static final int MAX_CONTENT_LENGTH = 1024 * 100;
